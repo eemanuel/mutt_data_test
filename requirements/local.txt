@@ -1,0 +1,3 @@
+ipython==8.25
+ipdb==0.13.13
+factory-boy==3.3.3

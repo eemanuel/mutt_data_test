@@ -1,0 +1,141 @@
+services:
+  api:
+    image: api
+    env_file:
+      - ./.env
+    build:
+      context: .
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+    command: >
+      bash -c "
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - db
+    volumes:
+      - .:/source
+    networks:
+      - mutt
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+
+  db:
+    image: postgres:18.0-alpine3.22
+    environment:
+      POSTGRES_DB: mutt_db
+      POSTGRES_USER: user_mutt
+      POSTGRES_PASSWORD: mutt
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    networks:
+      - mutt
+
+
+  redis:
+    image: redis:8.2.2-alpine
+    volumes:
+      - redis_data:/data
+    networks:
+      - mutt
+
+
+  celery:
+    image: "api"
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+    command: >
+      bash -c "
+      sleep 5 &&
+      celery -A utils.celery_app worker -l DEBUG"
+    environment:
+      - C_FORCE_ROOT=True
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/source
+    networks:
+      - mutt
+    ports:
+      - "6899-6909:6899-6909"
+
+
+  celery-beat:
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+    command: >
+      bash -c "
+      sleep 5 &&
+      celery -A utils.celery_app beat -l info"
+    depends_on:
+      - redis
+      - api
+    volumes:
+      - .:/source
+    networks:
+      - mutt
+
+  flower:
+    image: "api"
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+    command: >
+      bash -c "
+      sleep 5 &&
+      celery -A utils.celery_app beat -l info"
+    depends_on:
+      - celery-beat
+
+    volumes:
+      - .:/source
+    networks:
+      - mutt
+    ports:
+      - "5555:5555"
+
+  frontend:
+    image: node:24-alpine3.21
+    volumes:
+      - ./frontend:/app
+      - node_modules_cache:/app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # active scan files to detect changes and reload
+      - REACT_APP_API_URL=http://api:8000  # backend docker internal url
+    depends_on:
+      - celery-beat
+    networks:
+      - mutt
+
+networks:
+  mutt:
+    driver: bridge
+
+volumes:
+  postgres_data: {}
+  redis_data: {}
+  node_modules_cache: {}
