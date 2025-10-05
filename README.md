@@ -87,7 +87,7 @@ Go to the `mutt_data_project-api-1` container's shell
 $ docker exec -ti mutt_data_project-api-1 bash
 ```
 
-Here, you can run the tests:
+Here, you can run the backend tests:
 
 ```sh
 $ pytest --disable-warnings -q
@@ -127,10 +127,10 @@ pre-commit install
 
 [GET] http://localhost:8000/api/schema/
 
-### Products
+### Crypto Values
 
 **Get last 90 days crypto infos:**
-[POST] http://localhost:8000/api/crypto_values/last_90_days/
+[GET] http://localhost:8000/api/crypto_values/last_90_days/
 
 ### Flower:
 
