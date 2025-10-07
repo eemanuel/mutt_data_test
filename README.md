@@ -141,25 +141,25 @@ pre-commit install
 
 ## To Do In The Future
 
-● Test better the backend and write frontend tests.
-● Think in more ways to modularize and abstract elements to make the code cleaner.
-● Analize all the styles and think if the appearence should be nicer.
-● Enhance the graphic Chart.
-● Check if React Redux should be implemented.
-● Make better UX with better colors, better dark and light themes
-● Enhance the responsiveness paying attention to all components
-● If It is necessary, save in the database all the data requested from Coingecko, removing all or almost all the django cache, creating a relationship between the daily registers with the 10 mins registers or similar, to avoid heavy queries if the db increases their size with the time.
-● Write a better pre-commit, checking the newest hooks.
-● Try to implment tailwind v4 in place of the v3 used in the current project.
-● Check if some pattern designs should be used to write cleaner code.
-● Analize more patiently the cache management in the backend.
+- Test better the backend and write frontend tests.
+- Think in more ways to modularize and abstract elements to make the code cleaner.
+- Analize all the styles and think if the appearence should be nicer.
+- Enhance the graphic Chart.
+- Check if React Redux should be implemented.
+- Make better UX with better colors, better dark and light themes
+- Enhance the responsiveness paying attention to all components
+- If It is necessary, save in the database all the data requested from Coingecko, removing all or almost all the django cache, creating a relationship between the daily registers with the 10 mins registers or similar, to avoid heavy queries if the db increases their size with the time.
+- Write a better pre-commit, checking the newest hooks.
+- Try to implment tailwind v4 in place of the v3 used in the current project.
+- Check if some pattern designs should be used to write cleaner code.
+- Analize more patiently the cache management in the backend.
 
-● add filtering, pagination, and/or any other columns from the CoinGecko API that seem useful.
-● Manage Python dependencies with Poetry (we have our own intro guide)
-● Database migrations, e.g. using Alembic
-● Consider using react-query or swr and adding auto-refresh every 30 seconds
-● User can star / favorite coins, not lost on refreshes or changing browser
-● Chart the 5-day moving average for coins and plot it together with the price (How would you do this if you had to implement it in the React side?)
-● Server-side Rendering (SSR) or SSG (Static Site Generation); PWA features
-● Adding rate-limiting to your endpoints
-● Add CI/CD or even deploy your solution online (share the URL with us 😃)
+- add filtering, pagination, and/or any other columns from the CoinGecko API that seem useful.
+- Manage Python dependencies with Poetry (we have our own intro guide)
+- Database migrations, e.g. using Alembic
+- Consider using react-query or swr and adding auto-refresh every 30 seconds
+- User can star / favorite coins, not lost on refreshes or changing browser
+- Chart the 5-day moving average for coins and plot it together with the price (How would you do this if you had to implement it in the React side?)
+- Server-side Rendering (SSR) or SSG (Static Site Generation); PWA features
+- Adding rate-limiting to your endpoints
+- Add CI/CD or even deploy your solution online (share the URL with us 😃)
