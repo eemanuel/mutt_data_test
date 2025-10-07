@@ -11,6 +11,7 @@ from rest_framework.permissions import AllowAny
 
 from crypto_values.models import get_model_class
 from crypto_values.constants import DAYS_PERIOD, CRYPTO_DECIMAL_SPACES
+from crypto_values.utils import get_crypto_keys_from_cache
 
 
 __all__ = ("CryptoViewSet",)
@@ -26,24 +27,27 @@ class CryptoViewSet(viewsets.ViewSet):
         return Response(data)
 
     def _get_last_data_from_cache(self):
-        last_key = cache.get("crypto_values_last_key")
-        return cache.get(last_key) | {"hour_requested": self._get_hour_requested(last_key)}
+        last_key = cache.get("crypto_last_key")
+        items = cache.get(last_key)
+        data_2 = list()
+        for item in items:
+            date_time = item.pop("datetime")
+            data_2.append(item | {"hour_requested": date_time.strftime("%H:%M")})
+        return data_2
 
     @action(detail=False, methods=["get"])
     def today_values(self, request):
-        data = self._get_all_data_from_cache()
+        data = list()
+        for items in self._get_all_data_from_cache():
+            for item in items:
+                date_time = item.pop("datetime")
+                data.append(item | {"hour_requested": date_time.strftime("%H:%M")})
+        data.sort(key=lambda item: item["hour_requested"], reverse=True)
         return Response(data)
 
     def _get_all_data_from_cache(self):
-        keys = set(cache.keys("crypto_values*"))
-        keys = keys.difference({"crypto_values_keys_amount", "crypto_values_last_key"})
-        keys = list(keys)
-        keys.sort(reverse=True)
-        return [cache.get(key) | {"hour_requested": self._get_hour_requested(key)} for key in keys]
-
-    @staticmethod
-    def _get_hour_requested(key):
-        return key[-5:].replace("_", ":")
+        keys = get_crypto_keys_from_cache()
+        return [cache.get(key) for key in keys]
 
     @action(detail=False, methods=["get"])
     def last_90_days(self, request):
@@ -84,7 +88,11 @@ class CryptoViewSet(viewsets.ViewSet):
             queryset.values("period")
             .annotate(
                 period_usd_avg=Round(Avg("usd_avg_value", distinct=True), CRYPTO_DECIMAL_SPACES),
+                period_usd_avg_market_cap=Round(Avg("usd_avg_market_cap", distinct=True), CRYPTO_DECIMAL_SPACES),
+                period_usd_avg_24h_vol=Round(Avg("usd_avg_24h_vol", distinct=True), CRYPTO_DECIMAL_SPACES),
                 period_ars_avg=Round(Avg("ars_avg_value", distinct=True), CRYPTO_DECIMAL_SPACES),
+                period_ars_avg_market_cap=Round(Avg("ars_avg_market_cap", distinct=True), CRYPTO_DECIMAL_SPACES),
+                period_ars_avg_24h_vol=Round(Avg("ars_avg_24h_vol", distinct=True), CRYPTO_DECIMAL_SPACES),
             )
             .order_by("-period")
         )

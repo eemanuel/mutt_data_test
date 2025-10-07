@@ -7,7 +7,7 @@ from rest_framework.test import APIClient
 
 from crypto_values.constants import DAYS_PERIOD
 from crypto_values.models import BitcoinDailyValues
-from crypto_values.factories import BitcoinDailyValuesFactory
+from crypto_values.tests.factories import BitcoinDailyValuesFactory
 
 
 @pytest.mark.django_db
@@ -33,7 +33,7 @@ class TestCryptoViewSet:
     @pytest.mark.django_db
     @pytest.mark.success
     @pytest.mark.bitcoin
-    def test_success(self, granularity):
+    def test_last_90_days_success(self, granularity):
         assert BitcoinDailyValues.objects.count() == 95
 
         url = reverse("crypto-views-last-90-days")
@@ -42,8 +42,15 @@ class TestCryptoViewSet:
 
         assert response.status_code == 200
         data = response.json()
+
         for item in data:
-            assert item["period"] and item["period_usd_avg"] and item["period_ars_avg"]
+            assert item["period"] is not None
+            assert item["period_usd_avg"] is not None
+            assert item["period_usd_avg_24h_vol"] is not None
+            assert item["period_usd_avg_market_cap"] is not None
+            assert item["period_ars_avg"] is not None
+            assert item["period_ars_avg_24h_vol"] is not None
+            assert item["period_ars_avg_market_cap"] is not None
 
     @pytest.mark.django_db
     @pytest.mark.error

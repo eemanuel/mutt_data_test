@@ -53,6 +53,12 @@ code {
   .table-cell {
     @apply px-5 py-3;
   }
+  .table-cell-hightlight {
+    @apply font-bold text-green-300;
+  }
+  .table-cell-hightlight-2 {
+    @apply text-yellow-300;
+  }
   .table-cell-no-info {
     @apply px-5 py-3 text-red-500 text-lg font-bold bg-blue-950;
   }
@@ -69,5 +75,8 @@ code {
 
   .refresh-button {
     @apply bg-green-600 text-white px-10 rounded hover:bg-blue-400 transition;
+  }
+  .quiet-button {
+    @apply py-5 bg-gray-800 dark:bg-black text-gray-100 px-10 rounded hover:bg-sky-900 dark:hover:bg-gray-900 transition;
   }
 }

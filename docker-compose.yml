@@ -126,7 +126,6 @@ services:
       - api
     volumes:
       - ./frontend:/frontend
-      # - node_modules_cache:/frontend/node_modules
     networks:
       - mutt
     ports:
@@ -139,4 +138,3 @@ networks:
 volumes:
   postgres_data: {}
   redis_data: {}
-  # node_modules_cache: {}

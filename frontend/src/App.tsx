@@ -5,13 +5,13 @@ import TodayPage from "./pages/TodayPage/TodayPage";
 import TablePage from "./pages/TablePage/TablePage";
 import ChartsPage from "./pages/ChartsPage/ChartsPage";
 import "./index.css";
-import DefaultSidebar from "./components/Sidebar";
+import Sidebar from "./components/Sidebar";
 
 const App: React.FC = () => {
   return (
     <div className="flex h-screen">
-      <DefaultSidebar />
-      <main className="flex-1 p-8 bg-gray-700 overflow-auto">
+      <Sidebar />
+      <main className="flex-1 p-8 bg-gray-700 overflow-auto dark:bg-black">
         <Routes>
           <Route path="/lasts" element={<LastsValuesPage />} />
           <Route path="/today" element={<TodayPage />} />

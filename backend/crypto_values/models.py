@@ -24,10 +24,14 @@ class CryptoValuesBase(TimeStampModel):
     usd_max_value = FloatField(max_length=20)
     usd_min_value = FloatField(max_length=20)
     usd_avg_value = FloatField(max_length=20)
+    usd_avg_market_cap = FloatField(max_length=25)
+    usd_avg_24h_vol = FloatField(max_length=25)
 
     ars_max_value = FloatField(max_length=20)
     ars_min_value = FloatField(max_length=20)
     ars_avg_value = FloatField(max_length=20)
+    ars_avg_market_cap = FloatField(max_length=25)
+    ars_avg_24h_vol = FloatField(max_length=25)
 
     class Meta:
         abstract = True
@@ -39,12 +43,14 @@ class CryptoValuesBase(TimeStampModel):
 
 class BitcoinDailyValues(CryptoValuesBase):
     class Meta(CryptoValuesBase.Meta):
+        abstract = False
         db_table = "bitcoin_daily_values"
         indexes = [_get_created_index("bitcoin")]
 
 
 class EthereumDailyValues(CryptoValuesBase):
     class Meta(CryptoValuesBase.Meta):
+        abstract = False
         db_table = "ethereum_daily_values"
         indexes = [_get_created_index("ethereum")]
 

@@ -31,10 +31,20 @@ class DailyValuesFactoryBase(factory.django.DjangoModelFactory):
     )
     usd_max_value = factory.LazyAttribute(lambda obj: round(uniform(obj.usd_avg_value + 1, obj.usd_avg_value + 10), 2))
     usd_min_value = factory.LazyAttribute(lambda obj: round(uniform(obj.usd_avg_value - 10, obj.usd_avg_value - 1), 2))
+    usd_avg_market_cap = factory.Faker(
+        "pyfloat", positive=True, right_digits=CRYPTO_DECIMAL_SPACES, min_value=100_000_000, max_value=300_000_000
+    )
+    usd_avg_24h_vol = factory.Faker(
+        "pyfloat", positive=True, right_digits=CRYPTO_DECIMAL_SPACES, min_value=500_000_000, max_value=700_000_000
+    )
 
-    ars_avg_value = factory.LazyAttribute(lambda obj: round(obj.usd_avg_value * ARS_VALUE, 2))
+    ars_avg_value = factory.LazyAttribute(lambda obj: round(obj.usd_avg_value * ARS_VALUE, CRYPTO_DECIMAL_SPACES))
     ars_max_value = factory.LazyAttribute(_get_ars_max_value)
     ars_min_value = factory.LazyAttribute(_get_ars_min_value)
+    ars_avg_market_cap = factory.LazyAttribute(
+        lambda obj: round(obj.usd_avg_market_cap * ARS_VALUE, CRYPTO_DECIMAL_SPACES)
+    )
+    ars_avg_24h_vol = factory.LazyAttribute(lambda obj: round(obj.usd_avg_24h_vol * ARS_VALUE, CRYPTO_DECIMAL_SPACES))
 
     @classmethod
     def _create(cls, model_class, *args, **kwargs):

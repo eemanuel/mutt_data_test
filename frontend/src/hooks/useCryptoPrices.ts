@@ -7,13 +7,22 @@ export interface CryptoPrice {
   ars: number;
 }
 
-export interface CurrentCryptoData {
-  bitcoin?: CryptoPrice;
-  ethereum?: CryptoPrice;
+export interface CryptoItem {
+  crypto_id?: string;
   hour_requested?: string;
+  usd?: number;
+  usd_market_cap?: number;
+  usd_24h_vol?: number;
+  ars?: number;
+  ars_market_cap?: number;
+  ars_24h_vol?: number;
   period?: string;
   period_usd_avg?: number;
   period_ars_avg?: number;
+  period_usd_avg_24h_vol?: number;
+  period_usd_avg_market_cap?: number;
+  period_ars_avg_24h_vol?: number;
+  period_ars_avg_market_cap?: number;
 }
 
 interface UseCryptoPricesOptions {
@@ -31,7 +40,7 @@ export default function useCryptoPrices({
   granularity,
   flag,
 }: UseCryptoPricesOptions) {
-  const [data, setData] = useState<CurrentCryptoData[]>([]);
+  const [data, setData] = useState<CryptoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
