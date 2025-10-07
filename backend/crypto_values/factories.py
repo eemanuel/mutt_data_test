@@ -12,7 +12,7 @@ __all__ = (
 )
 
 
-ARS_VALUE = 1800
+ARS_VALUE = 1500
 
 
 def _get_ars_max_value(obj):

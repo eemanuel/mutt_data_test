@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const hitBackend = axios.create({
+const backendRequester = axios.create({
   baseURL: "http://localhost:8000/api",
 });
 
-export default hitBackend;
+export default backendRequester;

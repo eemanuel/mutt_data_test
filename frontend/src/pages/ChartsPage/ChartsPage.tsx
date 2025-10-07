@@ -10,7 +10,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
-import useDailyPrices from "../../hooks/useDailyPrices";
+import useCryptoPrices from "../../hooks/useCryptoPrices";
 import Selector from "../../components/Selector";
 
 const ChartsPage: React.FC = () => {
@@ -20,17 +20,21 @@ const ChartsPage: React.FC = () => {
   >("monthly");
   const [currency, setCurrency] = useState<"usd" | "ars" | "both">("usd");
 
-  const { data, loading, error } = useDailyPrices(coin, granularity);
+  const { data, loading, error } = useCryptoPrices({
+    endpoint: "last_90_days",
+    params: { crypto_id: "bitcoin", granularity: "monthly" },
+    flag: true,
+  });
 
-  if (loading) return <p className="text-center text-gray-600">Loading...</p>;
-  if (error) return <p className="text-center text-red-600">{error}</p>;
+  if (loading) return <p className="loading">Loading...</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
-    <div className="w-full p-6">
-      <h1 className="text-3xl font-bold mb-6">Crypto Chart</h1>
+    <div className="w-full">
+      <h1 className="section-title">Crypto Chart</h1>
 
       {/* Selectors */}
-      <div className="flex gap-4 mb-6 flex-wrap">
+      <div className="div-selector">
         <Selector
           label="Coin"
           value={coin}
@@ -52,14 +56,11 @@ const ChartsPage: React.FC = () => {
       </div>
 
       {/* Chart */}
-      <div className="bg-white shadow-md rounded-lg p-4">
-        <ResponsiveContainer width="100%" height={550}>
-          <LineChart
-            data={data}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-          >
+      <div className="main-obj">
+        <ResponsiveContainer width="100%" height={700}>
+          <LineChart data={data} margin={{ left: 20, right: 55 }}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="period" />
+            <XAxis dataKey="period" className="text-lg" />
             <YAxis />
             <Tooltip />
             <Legend />

@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
   margin: 0;
@@ -12,4 +14,60 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+@layer components {
+  .sidebar {
+    @apply flex-col items-center text-xl mx-5 hover:text-yellow-400;
+  }
+
+  .section-title {
+    @apply text-4xl font-bold text-white mb-5;
+  }
+
+  .loading {
+    @apply font-bold text-xl text-center text-yellow-500 m-[200px];
+  }
+  .error {
+    @apply font-bold text-xl text-center text-red-600 m-[200px];
+  }
+
+  .div-selector {
+    @apply flex gap-10 mb-5;
+  }
+  .main-obj {
+    @apply overflow-x-auto rounded-lg;
+  }
+  .table-style {
+    @apply min-w-full text-center text-white;
+  }
+  .table-thead {
+    @apply bg-gray-900 text-base text-white uppercase;
+  }
+  .table-tr {
+    @apply border-b border-gray-900 hover:bg-yellow-900;
+  }
+  .table-cell-first-row {
+    @apply px-1 py-3;
+  }
+  .table-cell {
+    @apply px-5 py-3;
+  }
+  .table-cell-no-info {
+    @apply px-5 py-3 text-red-500 text-lg font-bold bg-blue-950;
+  }
+
+  .selector-div {
+    @apply flex flex-col mb-5;
+  }
+  .selector-label {
+    @apply mb-1 text-base text-gray-300;
+  }
+  .selector-select {
+    @apply border rounded px-7 py-1 text-gray-200 text-lg bg-blue-900 hover:bg-yellow-700;
+  }
+
+  .refresh-button {
+    @apply bg-green-600 text-white px-10 rounded hover:bg-blue-400 transition;
+  }
 }

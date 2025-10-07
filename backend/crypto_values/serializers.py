@@ -1,5 +1,4 @@
 from rest_framework.serializers import FloatField, Serializer
-from django.conf import settings
 
 from crypto_values.constants import CRYPTO_DECIMAL_SPACES
 
@@ -8,8 +7,8 @@ __all__ = ("CryptoSerializer",)
 
 
 class CurrencySerializer(Serializer):
-    usd = FloatField()
-    ars = FloatField()
+    usd = FloatField(required=True)
+    ars = FloatField(required=True)
 
     def validate(self, data):
         data["usd"] = round(data["usd"], CRYPTO_DECIMAL_SPACES)
@@ -18,7 +17,5 @@ class CurrencySerializer(Serializer):
 
 
 class CryptoSerializer(Serializer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for crypto_id in settings.COIN_IDS:
-            setattr(self, crypto_id, CurrencySerializer())
+    bitcoin = CurrencySerializer(required=True)
+    ethereum = CurrencySerializer(required=True)

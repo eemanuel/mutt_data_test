@@ -79,4 +79,5 @@ def save_daily_crypto_values():
 @celery_app.task(name="crypto_values.tasks.print_info")
 def print_info():
     keys_amount = cache.get("crypto_values_keys_amount")
+    keys_amount = keys_amount if keys_amount is not None else 0
     print(f"#{keys_amount} keys in the cache")

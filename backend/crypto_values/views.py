@@ -1,4 +1,4 @@
-from django.db.models import Avg, DateField, Count
+from django.db.models import Avg, DateField
 from django.db.models.functions import TruncDay, TruncWeek, TruncMonth, Round
 from datetime import timedelta, date
 from django.conf import settings
@@ -19,6 +19,31 @@ __all__ = ("CryptoViewSet",)
 class CryptoViewSet(viewsets.ViewSet):
     GRANULARITY = ["daily", "weekly", "monthly"]
     permission_classes = (AllowAny,)
+
+    @action(detail=False, methods=["get"])
+    def lasts_values(self, request):
+        data = self._get_last_data_from_cache()
+        return Response(data)
+
+    def _get_last_data_from_cache(self):
+        last_key = cache.get("crypto_values_last_key")
+        return cache.get(last_key) | {"hour_requested": self._get_hour_requested(last_key)}
+
+    @action(detail=False, methods=["get"])
+    def today_values(self, request):
+        data = self._get_all_data_from_cache()
+        return Response(data)
+
+    def _get_all_data_from_cache(self):
+        keys = set(cache.keys("crypto_values*"))
+        keys = keys.difference({"crypto_values_keys_amount", "crypto_values_last_key"})
+        keys = list(keys)
+        keys.sort(reverse=True)
+        return [cache.get(key) | {"hour_requested": self._get_hour_requested(key)} for key in keys]
+
+    @staticmethod
+    def _get_hour_requested(key):
+        return key[-5:].replace("_", ":")
 
     @action(detail=False, methods=["get"])
     def last_90_days(self, request):

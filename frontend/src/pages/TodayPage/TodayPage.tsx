@@ -2,24 +2,26 @@ import React, { useState } from "react";
 import useCryptoPrices from "../../hooks/useCryptoPrices";
 import Selector from "../../components/Selector";
 
-const TablePage: React.FC = () => {
+const TodayPage: React.FC = () => {
   const [coin, setCoin] = useState<"bitcoin" | "ethereum">("bitcoin");
-  const [granularity, setGranularity] = useState<
-    "daily" | "weekly" | "monthly"
-  >("monthly");
+  const [flag, setFlag] = useState<boolean>(false);
 
   const { data, loading, error } = useCryptoPrices({
-    endpoint: "last_90_days",
-    params: { crypto_id: "bitcoin", granularity: "monthly" },
-    flag: true,
+    endpoint: "today_values",
+    flag,
   });
+  console.log(data);
 
   if (loading) return <p className="loading">Loading...</p>;
   if (error) return <p className="error">{error}</p>;
 
+  const handleFetch = () => {
+    setFlag(!flag);
+  };
+
   return (
     <div className="w-full">
-      <h1 className="section-title">Daily Crypto Prices (History)</h1>
+      <h1 className="section-title">Today Crypto Prices</h1>
 
       {/* Selectors */}
       <div className="div-selector">
@@ -29,12 +31,9 @@ const TablePage: React.FC = () => {
           onChange={setCoin}
           options={["bitcoin", "ethereum"]}
         />
-        <Selector
-          label="Granularity"
-          value={granularity}
-          onChange={setGranularity}
-          options={["daily", "weekly", "monthly"]}
-        />
+        <button onClick={handleFetch} className="refresh-button">
+          Refresh
+        </button>
       </div>
 
       {/* Table */}
@@ -46,13 +45,13 @@ const TablePage: React.FC = () => {
                 #
               </th>
               <th scope="col" className="table-cell">
-                Period
+                Hour
               </th>
               <th scope="col" className="table-cell">
-                USD Avg
+                USD Price
               </th>
               <th scope="col" className="table-cell">
-                ARS Avg
+                ARS Price
               </th>
             </tr>
           </thead>
@@ -66,18 +65,16 @@ const TablePage: React.FC = () => {
               </tr>
             ) : (
               data.map((item, index) => (
-                <tr key="crypto-values" className="table-tr">
+                <tr key={`crypto-current-values-${index}`} className="table-tr">
                   <td className="table-cell-first-row">{index + 1}</td>
-                  <td className="table-cell">{item.period}</td>
+                  <td className="table-cell">{item.hour_requested}</td>
                   <td className="table-cell">
-                    {item.period_usd_avg === undefined
-                      ? ""
-                      : item.period_usd_avg.toFixed(4)}
+                    {/* @ts-ignore */}
+                    {item[coin].usd.toFixed(4)}
                   </td>
                   <td className="table-cell">
-                    {item.period_ars_avg === undefined
-                      ? ""
-                      : item.period_ars_avg.toFixed(4)}
+                    {/* @ts-ignore */}
+                    {item[coin].ars.toFixed(4)}
                   </td>
                 </tr>
               ))
@@ -89,4 +86,4 @@ const TablePage: React.FC = () => {
   );
 };
 
-export default TablePage;
+export default TodayPage;

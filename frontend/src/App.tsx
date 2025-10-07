@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import LastsValuesPage from "./pages/LastsValuesPage/LastsValuesPage";
+import TodayPage from "./pages/TodayPage/TodayPage";
 import TablePage from "./pages/TablePage/TablePage";
 import ChartsPage from "./pages/ChartsPage/ChartsPage";
 import "./index.css";
@@ -9,8 +11,10 @@ const App: React.FC = () => {
   return (
     <div className="flex h-screen">
       <DefaultSidebar />
-      <main className="flex-1 p-8 md:ml-5 bg-gray-100 overflow-auto">
+      <main className="flex-1 p-8 md:ml-5 bg-gray-700 overflow-auto">
         <Routes>
+          <Route path="/lasts" element={<LastsValuesPage />} />
+          <Route path="/today" element={<TodayPage />} />
           <Route path="/table" element={<TablePage />} />
           <Route path="/charts" element={<ChartsPage />} />
         </Routes>

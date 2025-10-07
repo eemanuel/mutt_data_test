@@ -78,6 +78,7 @@ $ git clone https://github.com/eemanuel/mutt_data_test
 ## Run docker-compose commands
 
 ```sh
+$ export ENVIRONMENT=local  # to local installations
 $ docker-compose up
 ```
 

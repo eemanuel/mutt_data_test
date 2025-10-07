@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 
 from crypto_values.constants import DAYS_PERIOD
-from crypto_values.factories import BitcoinDailyValuesFactory
+from crypto_values.factories import BitcoinDailyValuesFactory, EthereumDailyValuesFactory
 
 
 class Command(BaseCommand):
@@ -20,3 +20,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for num in range(options["since_days_ago"]):
             BitcoinDailyValuesFactory(created=date.today() - timedelta(days=num))
+            EthereumDailyValuesFactory(created=date.today() - timedelta(days=num))
