@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import backendRequester from "../services/backendRequester";
+import { Coin, Granularity } from "../constants";
 
 export interface CryptoPrice {
   usd: number;
@@ -18,12 +19,16 @@ export interface CurrentCryptoData {
 interface UseCryptoPricesOptions {
   endpoint: string;
   params?: Record<string, string>;
+  coin?: Coin;
+  granularity?: Granularity;
   flag?: boolean;
 }
 
 export default function useCryptoPrices({
   endpoint,
   params,
+  coin,
+  granularity,
   flag,
 }: UseCryptoPricesOptions) {
   const [data, setData] = useState<CurrentCryptoData[]>([]);
@@ -51,7 +56,7 @@ export default function useCryptoPrices({
 
   useEffect(() => {
     fetchData();
-  }, [flag]);
+  }, [coin, granularity, flag]);
 
   return { data, loading, error };
 }

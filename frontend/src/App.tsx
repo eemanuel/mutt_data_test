@@ -11,7 +11,7 @@ const App: React.FC = () => {
   return (
     <div className="flex h-screen">
       <DefaultSidebar />
-      <main className="flex-1 p-8 md:ml-5 bg-gray-700 overflow-auto">
+      <main className="flex-1 p-8 bg-gray-700 overflow-auto">
         <Routes>
           <Route path="/lasts" element={<LastsValuesPage />} />
           <Route path="/today" element={<TodayPage />} />

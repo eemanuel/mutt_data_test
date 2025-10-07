@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import useCryptoPrices from "../../hooks/useCryptoPrices";
 import Selector from "../../components/Selector";
+import { COINS, GRANULARITIES, Coin, Granularity } from "../../constants";
 
 const TablePage: React.FC = () => {
-  const [coin, setCoin] = useState<"bitcoin" | "ethereum">("bitcoin");
-  const [granularity, setGranularity] = useState<
-    "daily" | "weekly" | "monthly"
-  >("monthly");
+  const [coin, setCoin] = useState<Coin>("bitcoin");
+  const [granularity, setGranularity] = useState<Granularity>("monthly");
 
   const { data, loading, error } = useCryptoPrices({
     endpoint: "last_90_days",
-    params: { crypto_id: "bitcoin", granularity: "monthly" },
+    params: { crypto_id: coin, granularity: granularity },
+    coin,
+    granularity,
     flag: true,
   });
 
@@ -27,13 +28,13 @@ const TablePage: React.FC = () => {
           label="Coin"
           value={coin}
           onChange={setCoin}
-          options={["bitcoin", "ethereum"]}
+          options={COINS}
         />
         <Selector
           label="Granularity"
           value={granularity}
           onChange={setGranularity}
-          options={["daily", "weekly", "monthly"]}
+          options={GRANULARITIES}
         />
       </div>
 

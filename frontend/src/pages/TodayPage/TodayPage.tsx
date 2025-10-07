@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import useCryptoPrices from "../../hooks/useCryptoPrices";
 import Selector from "../../components/Selector";
+import { COINS, Coin } from "../../constants";
 
 const TodayPage: React.FC = () => {
-  const [coin, setCoin] = useState<"bitcoin" | "ethereum">("bitcoin");
+  const [coin, setCoin] = useState<Coin>("bitcoin");
   const [flag, setFlag] = useState<boolean>(false);
 
   const { data, loading, error } = useCryptoPrices({
@@ -29,7 +30,7 @@ const TodayPage: React.FC = () => {
           label="Coin"
           value={coin}
           onChange={setCoin}
-          options={["bitcoin", "ethereum"]}
+          options={COINS}
         />
         <button onClick={handleFetch} className="refresh-button">
           Refresh

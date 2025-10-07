@@ -12,17 +12,21 @@ import {
 } from "recharts";
 import useCryptoPrices from "../../hooks/useCryptoPrices";
 import Selector from "../../components/Selector";
+import { COINS, GRANULARITIES, Coin, Granularity } from "../../constants";
+
+const CURRENCIES = ["usd", "ars", "both"];
+type Currencies = typeof CURRENCIES[number]; // "usd" | "ars" | "both"
 
 const ChartsPage: React.FC = () => {
-  const [coin, setCoin] = useState<"bitcoin" | "ethereum">("bitcoin");
-  const [granularity, setGranularity] = useState<
-    "daily" | "weekly" | "monthly"
-  >("monthly");
-  const [currency, setCurrency] = useState<"usd" | "ars" | "both">("usd");
+  const [coin, setCoin] = useState<Coin>("bitcoin");
+  const [granularity, setGranularity] = useState<Granularity>("monthly");
+  const [currency, setCurrency] = useState<Currencies>("usd");
 
   const { data, loading, error } = useCryptoPrices({
     endpoint: "last_90_days",
-    params: { crypto_id: "bitcoin", granularity: "monthly" },
+    params: { crypto_id: coin, granularity: granularity },
+    coin,
+    granularity,
     flag: true,
   });
 
@@ -39,19 +43,19 @@ const ChartsPage: React.FC = () => {
           label="Coin"
           value={coin}
           onChange={setCoin}
-          options={["bitcoin", "ethereum"]}
+          options={COINS}
         />
         <Selector
           label="Granularity"
           value={granularity}
           onChange={setGranularity}
-          options={["daily", "weekly", "monthly"]}
+          options={GRANULARITIES}
         />
         <Selector
           label="Currency"
           value={currency}
           onChange={setCurrency}
-          options={["usd", "ars", "both"]}
+          options={CURRENCIES}
         />
       </div>
 

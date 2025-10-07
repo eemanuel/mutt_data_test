@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useCryptoPrices from "../../hooks/useCryptoPrices";
+import { COINS } from "../../constants";
 
 const LastsValuesPage: React.FC = () => {
   const [flag, setFlag] = useState<boolean>(false);
@@ -58,13 +59,15 @@ const LastsValuesPage: React.FC = () => {
                 </td>
               </tr>
             ) : (
-              ["bitcoin", "ethereum"].map((coinName, index) => (
+              COINS.map((coinName, index) => (
                 <tr
                   key={`crypto-current-values-${coinName}`}
                   className="table-tr"
                 >
                   <td className="table-cell-first-row">{index + 1}</td>
-                  <td className="table-cell">{coinName}</td>
+                  <td className="table-cell font-bold text-yellow-300">
+                    {coinName.toUpperCase()}
+                  </td>
                   {/* @ts-ignore */}
                   <td className="table-cell">{data.hour_requested}</td>
                   <td className="table-cell">
