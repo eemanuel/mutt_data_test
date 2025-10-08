@@ -14,7 +14,6 @@ const Sidebar: React.FC = () => {
   ];
 
   return (
-    // flex flex-col bg-gray-900 text-gray-400 py-[200px] space-y-10 fixed top-0 w-full
     <aside
       className="fixed top-0 w-full bg-gray-900 text-gray-400
     md:static md:w-32 md:h-screen md:space-y-10 md:flex md:flex-col dark:bg-black"

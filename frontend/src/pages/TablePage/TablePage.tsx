@@ -33,12 +33,6 @@ const TablePage: React.FC = () => {
     flag: true,
   });
 
-  const getFileName = () => {
-    return `crypto_prices_${getCurrentTimestamp()}_${coin}_${granularity}_${
-      sortConfig?.key
-    }_${sortConfig?.direction}_history_table.csv`;
-  };
-
   const sortedData = React.useMemo(
     () => sortData(data, sortConfig),
     [data, sortConfig]
@@ -47,6 +41,12 @@ const TablePage: React.FC = () => {
   const handleSort = (key: string) => {
     setSortConfig((prev) => getNextSortConfig(prev, key));
   };
+
+  const fileName = React.useMemo(() => {
+    return `crypto_prices_${getCurrentTimestamp()}_${coin}_${granularity}_${
+      sortConfig?.key
+    }_${sortConfig?.direction}_history_table.csv`;
+  }, [coin, granularity, sortConfig]);
 
   if (loading) return <p className="loading">Loading...</p>;
   if (error) return <p className="error">{error}</p>;
@@ -69,7 +69,7 @@ const TablePage: React.FC = () => {
           onChange={setGranularity}
           options={GRANULARITIES}
         />
-        <ButtonExportCSV data={sortedData} filename={getFileName()} />
+        <ButtonExportCSV data={sortedData} filename={fileName} />
       </div>
 
       {/* Table */}

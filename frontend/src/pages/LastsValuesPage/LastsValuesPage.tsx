@@ -24,18 +24,18 @@ const LastsValuesPage: React.FC = () => {
     [data, sortConfig]
   );
 
-  if (loading) return <p className="loading">Loading...</p>;
-  if (error) return <p className="error">{error}</p>;
+  const fileName = React.useMemo(() => {
+    return `crypto_prices_${getCurrentTimestamp()}__${sortConfig?.key}_${
+      sortConfig?.direction
+    }_lasts_table.csv`;
+  }, [sortConfig]);
 
   const handleFetch = () => {
     setFlag(!flag);
   };
 
-  const getFileName = () => {
-    return `crypto_prices_${getCurrentTimestamp()}__${sortConfig?.key}_${
-      sortConfig?.direction
-    }_lasts_table.csv`;
-  };
+  if (loading) return <p className="loading">Loading...</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
     <div className="w-full">
@@ -45,7 +45,7 @@ const LastsValuesPage: React.FC = () => {
         <button onClick={handleFetch} className="refresh-button">
           Refresh
         </button>
-        <ButtonExportCSV data={sortedData} filename={getFileName()} />
+        <ButtonExportCSV data={sortedData} filename={fileName} />
       </div>
 
       {/* Table */}
