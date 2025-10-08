@@ -3,11 +3,13 @@ import useCryptoPrices from "../../hooks/useCryptoPrices";
 import Selector from "../../components/Selector";
 import ButtonExportCSV from "../../components/ButtonExportCSV";
 import NoInfoRow from "../../components/NoInfoRow";
+import PaginationButtons from "../../components/PaginationButtons";
 import {
   getNextSortConfig,
   sortData,
   getSortSymbol,
   getCurrentTimestamp,
+  getPaginatedData,
 } from "../../utils";
 import {
   COINS,
@@ -24,6 +26,7 @@ const TablePage: React.FC = () => {
     key: string;
     direction: SortOptions;
   } | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { data, loading, error } = useCryptoPrices({
     endpoint: "last_90_days",
@@ -48,6 +51,10 @@ const TablePage: React.FC = () => {
     }_${sortConfig?.direction}_history_table.csv`;
   }, [coin, granularity, sortConfig]);
 
+  const paginatedData = React.useMemo(() => {
+    return getPaginatedData(currentPage, sortedData);
+  }, [sortedData, currentPage]);
+
   if (loading) return <p className="loading">Loading...</p>;
   if (error) return <p className="error">{error}</p>;
 
@@ -70,6 +77,11 @@ const TablePage: React.FC = () => {
           options={GRANULARITIES}
         />
         <ButtonExportCSV data={sortedData} filename={fileName} />
+        <PaginationButtons
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          sortedData={sortedData}
+        />
       </div>
 
       {/* Table */}
@@ -128,7 +140,7 @@ const TablePage: React.FC = () => {
                   </td>
                 </tr>
               ) : (
-                sortedData.map((item, index) => (
+                paginatedData.map((item, index) => (
                   <tr key={`crypto-values-${index}`} className="table-tr">
                     <td className="table-cell-first-row">{index + 1}</td>
                     <td className="table-cell table-cell-hightlight">

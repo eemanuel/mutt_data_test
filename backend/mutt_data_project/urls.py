@@ -23,7 +23,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/crypto_values/", include("crypto_values.urls")),
+    path("api/crypto-values/", include("crypto_values.urls")),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),  # download schema as yml
     path(
         "api/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"

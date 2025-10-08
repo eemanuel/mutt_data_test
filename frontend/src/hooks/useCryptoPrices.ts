@@ -43,7 +43,7 @@ export default function useCryptoPrices({
   flag,
   useReactQuery = false,
 }: UseCryptoPricesOptions) {
-  const url = `/crypto_values/${endpoint}/`;
+  const url = `/crypto-values/${endpoint}/`;
 
   const fetchData = async (): Promise<CryptoItem[]> => {
     const response = await backendRequester.get(url, {

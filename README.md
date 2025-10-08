@@ -133,7 +133,7 @@ pre-commit install
 ### Crypto Values
 
 **Get last 90 days crypto infos:**
-[GET] http://localhost:8000/api/crypto_values/last_90_days/
+[GET] http://localhost:8000/api/crypto-values/last_90_days/
 
 ### Flower:
 
@@ -154,11 +154,10 @@ pre-commit install
 - Check if some pattern designs should be used to write cleaner code.
 - Analize more patiently the cache management in the backend.
 
-- Add more filtering options, pagination, and/or any other columns from the CoinGecko API that seem useful.
+- Add more filtering options, and/or any other columns from the CoinGecko API that seem useful.
 - Manage Python dependencies with Poetry (we have our own intro guide)
 - Database migrations, e.g. using Alembic
 - User can star / favorite coins, not lost on refreshes or changing browser
 - Chart the 5-day moving average for coins and plot it together with the price (How would you do this if you had to implement it in the React side?)
 - Server-side Rendering (SSR) or SSG (Static Site Generation); PWA features
-- Adding rate-limiting to your endpoints
 - Add CI/CD or even deploy your solution online (share the URL with us 😃)

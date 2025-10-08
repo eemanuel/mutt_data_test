@@ -77,6 +77,6 @@ code {
     @apply bg-green-600 text-white px-10 rounded hover:bg-blue-400 transition;
   }
   .quiet-button {
-    @apply py-5 bg-gray-800 dark:bg-black text-gray-100 px-10 rounded hover:bg-sky-900 dark:hover:bg-gray-900 transition;
+    @apply text-base py-5 bg-gray-800 dark:bg-black text-gray-100 px-10 rounded hover:bg-sky-900 dark:hover:bg-gray-900 transition;
   }
 }

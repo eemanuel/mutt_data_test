@@ -4,13 +4,20 @@ import Selector from "../../components/Selector";
 import TableHead, { SortConfig } from "../../components/TableHead";
 import ButtonExportCSV from "../../components/ButtonExportCSV";
 import NoInfoRow from "../../components/NoInfoRow";
-import { getNextSortConfig, sortData, getCurrentTimestamp } from "../../utils";
+import PaginationButtons from "../../components/PaginationButtons";
+import {
+  getNextSortConfig,
+  sortData,
+  getCurrentTimestamp,
+  getPaginatedData,
+} from "../../utils";
 import { COINS, Coin } from "../../constants";
 
 const TodayPage: React.FC = () => {
   const [coin, setCoin] = useState<Coin>("bitcoin");
   const [flag, setFlag] = useState<boolean>(false);
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { data, loading, error } = useCryptoPrices({
     endpoint: "today_values",
@@ -32,6 +39,10 @@ const TodayPage: React.FC = () => {
       sortConfig?.direction
     }_today_table.csv`;
   }, [coin, sortConfig]);
+
+  const paginatedData = React.useMemo(() => {
+    return getPaginatedData(currentPage, sortedData);
+  }, [sortedData, currentPage]);
 
   const handleFetch = () => {
     setFlag(!flag);
@@ -56,6 +67,11 @@ const TodayPage: React.FC = () => {
           Refresh
         </button>
         <ButtonExportCSV data={sortedData} filename={fileName} />
+        <PaginationButtons
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          sortedData={sortedData}
+        />
       </div>
 
       {/* Table */}
@@ -66,7 +82,7 @@ const TodayPage: React.FC = () => {
             {sortedData.length === 0 ? (
               <NoInfoRow />
             ) : (
-              sortedData.map((item, index) => {
+              paginatedData.map((item, index) => {
                 if (item.crypto_id === coin) {
                   return (
                     <tr

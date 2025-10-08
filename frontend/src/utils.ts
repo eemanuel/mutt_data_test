@@ -1,4 +1,4 @@
-import { SortOptions } from "./constants";
+import { SortOptions, ITEMS_PER_PAGE } from "./constants";
 
 export const getNextSortConfig = (
   current: { key: string; direction: SortOptions } | null,
@@ -50,4 +50,12 @@ export const getCurrentTimestamp = () => {
     now.getDate()
   )}_${pad(now.getHours())}_${pad(now.getMinutes())}`;
   return timestamp;
+};
+
+export const getPaginatedData = <T>(
+  currentPage: number,
+  sortedData: T[]
+): T[] => {
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  return sortedData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 };
