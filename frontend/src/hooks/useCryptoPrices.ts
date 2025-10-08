@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import backendRequester from "../services/backendRequester";
 import { Coin, Granularity } from "../constants";
 
@@ -31,6 +32,7 @@ interface UseCryptoPricesOptions {
   coin?: Coin;
   granularity?: Granularity;
   flag?: boolean;
+  useReactQuery?: boolean;
 }
 
 export default function useCryptoPrices({
@@ -39,21 +41,42 @@ export default function useCryptoPrices({
   coin,
   granularity,
   flag,
+  useReactQuery = false,
 }: UseCryptoPricesOptions) {
+  const url = `/crypto_values/${endpoint}/`;
+
+  const fetchData = async (): Promise<CryptoItem[]> => {
+    const response = await backendRequester.get(url, {
+      params,
+    });
+    return response.data;
+  };
+
+  const query = useQuery<CryptoItem[], Error>({
+    queryKey: [
+      "cryptoPrices",
+      url,
+      params ? JSON.stringify(params) : "",
+      coin,
+      granularity,
+      flag,
+    ],
+    queryFn: fetchData,
+    refetchInterval: 30000, // each 30 secs
+    enabled: useReactQuery, // only use useQuery if useReactQuery is true
+  });
+
   const [data, setData] = useState<CryptoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async () => {
+  const getData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await backendRequester.get(
-        `/crypto_values/${endpoint}/`,
-        {
-          params,
-        }
-      );
+      const response = await backendRequester.get(url, {
+        params,
+      });
       setData(response.data);
     } catch (err: unknown) {
       if (err instanceof Error) setError(err.message);
@@ -64,8 +87,15 @@ export default function useCryptoPrices({
   };
 
   useEffect(() => {
-    fetchData();
-  }, [coin, granularity, flag]);
+    if (useReactQuery) return; // if useReactQuery is true then do not fetch manually
+    getData();
+  }, [url, coin, granularity, flag, useReactQuery]);
 
-  return { data, loading, error };
+  return useReactQuery
+    ? {
+        data: query.data ?? [],
+        loading: query.isLoading,
+        error: query.error ? (query.error as Error).message : null,
+      }
+    : { data, loading, error };
 }

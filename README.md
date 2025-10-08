@@ -154,10 +154,9 @@ pre-commit install
 - Check if some pattern designs should be used to write cleaner code.
 - Analize more patiently the cache management in the backend.
 
-- add filtering, pagination, and/or any other columns from the CoinGecko API that seem useful.
+- Add more filtering options, pagination, and/or any other columns from the CoinGecko API that seem useful.
 - Manage Python dependencies with Poetry (we have our own intro guide)
 - Database migrations, e.g. using Alembic
-- Consider using react-query or swr and adding auto-refresh every 30 seconds
 - User can star / favorite coins, not lost on refreshes or changing browser
 - Chart the 5-day moving average for coins and plot it together with the price (How would you do this if you had to implement it in the React side?)
 - Server-side Rendering (SSR) or SSG (Static Site Generation); PWA features

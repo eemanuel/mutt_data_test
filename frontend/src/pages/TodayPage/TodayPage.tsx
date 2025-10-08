@@ -15,6 +15,7 @@ const TodayPage: React.FC = () => {
   const { data, loading, error } = useCryptoPrices({
     endpoint: "today_values",
     flag,
+    useReactQuery: true,
   });
 
   const handleSort = (key: string) => {

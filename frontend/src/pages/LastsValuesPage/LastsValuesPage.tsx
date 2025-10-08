@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import useCryptoPrices from "../../hooks/useCryptoPrices";
-import { COINS } from "../../constants";
 import TableHead, { SortConfig } from "../../components/TableHead";
 import NoInfoRow from "../../components/NoInfoRow";
 import ButtonExportCSV from "../../components/ButtonExportCSV";
@@ -13,6 +12,7 @@ const LastsValuesPage: React.FC = () => {
   const { data, loading, error } = useCryptoPrices({
     endpoint: "lasts_values",
     flag,
+    useReactQuery: true,
   });
 
   const handleSort = (key: string) => {
